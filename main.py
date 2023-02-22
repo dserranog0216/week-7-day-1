@@ -15,7 +15,21 @@ headers = {
 page = requests.get(url, headers=headers)
 
 soup = BeautifulSoup(page.content, 'html.parser')
-# print(soup.prettify())
+#print(soup.prettify())
 #get all books
-
+books = soup.find_all(id="gridItemRoot")
+#print(books[0])
 #get info from first book
+book= books[0]
+
+rank = book.find('span', class_ ='zg-bdg-text').text[1:]
+print(rank)
+
+children = book.find('div', class_='zg-grid-general-faceout').div
+
+children.contents[0]
+
+title = book.find('div', class_='_cDEzb_p13n-sc-css-line-clamp-1_1Fn1y').div
+
+title = children.contents[1].text
+print(title)
