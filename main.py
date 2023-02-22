@@ -2,6 +2,7 @@
 # go to the shell command screen and type
 # pip install -r requirements.txt
 #to install the necessary components
+import csv
 import requests
 from bs4 import BeautifulSoup
 
@@ -22,14 +23,32 @@ books = soup.find_all(id="gridItemRoot")
 #get info from first book
 book= books[0]
 
-rank = book.find('span', class_ ='zg-bdg-text').text[1:]
-print(rank)
+csv_headers = ['Rank','Title','Author','Price']
 
-children = book.find('div', class_='zg-grid-general-faceout').div
+with open('amazon_books.csv','w', encoding='utf-8', newline='')as f:
+  writer = csv.writer(f)
+  writer.writerow(csv_headers)
 
-children.contents[0]
+for book in books:
 
-title = book.find('div', class_='_cDEzb_p13n-sc-css-line-clamp-1_1Fn1y').div
+  rank = book.find('span', class_ ='zg-bdg-text').text[1:]
+  print(rank)
+  
+  children = book.find('div', class_='zg-grid-general-faceout').div
+  
+  children.contents[0]
+  
+  title = book.find('div', class_='_cDEzb_p13n-sc-css-line-clamp-1_1Fn1y').div
+  
+  title = children.contents[1].text
+  print(title)
+  
+  author = children.contents[2].text
+  print(author)
+  
+  price = children.contents[-1].text
+  print(price)
 
-title = children.contents[1].text
-print(title)
+with open('amazon_books.csv','a', encoding='utf-8', newline='')as f:
+  writer = csv.writer(f)
+  writer.writerow([rank, title, author, price])
